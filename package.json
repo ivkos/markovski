@@ -1,0 +1,32 @@
+{
+  "name": "markovski",
+  "version": "1.0.0",
+  "description": "Generates a Markov chain based on text input",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivkos/markovski.git"
+  },
+  "keywords": [
+    "markov",
+    "chain",
+    "markov chain",
+    "generator"
+  ],
+  "author": {
+    "name": "Ivaylo Stoyanov",
+    "email": "me@ivkos.com",
+    "url": "https://github.com/ivkos"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ivkos/markovski/issues"
+  },
+  "homepage": "https://github.com/ivkos/markovski#readme",
+  "dependencies": {
+    "pick-one-by-weight": "^1.0.2"
+  },
+  "engines": {
+    "node": "6.x"
+  }
+}
