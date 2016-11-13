@@ -6,7 +6,7 @@ module.exports = class Markovski {
         this._sentence = "";
         this._order = 1;
 
-        this.order(order);
+        if (order) this.order(order);
         if (text) this.train(text);
     }
 
