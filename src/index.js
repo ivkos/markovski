@@ -3,7 +3,7 @@ const pickOneByWeight = require("pick-one-by-weight");
 module.exports = class Markovski {
     constructor(order, text) {
         this._model = Object.create(null);
-        this._sentence = "";
+        this._sentence = [];
         this._order = 1;
 
         if (order) this.order(order);
@@ -49,12 +49,12 @@ module.exports = class Markovski {
 
     //region endWhen
     /**
-     * @param sentence The generated sentence so far
+     * @param {string[]} sentence The generated sentence so far
      * @return {boolean} whether to stop generating more words
      * @private
      */
     _shouldEnd(sentence) {
-        return sentence.split(' ').length >= 10;
+        return sentence.length >= 10;
     }
 
     /**
@@ -62,13 +62,13 @@ module.exports = class Markovski {
      * Sentence generation will continue until this function returns true or there are no more words.
      *
      * @callback conditionFn
-     * @param {string} sentence The generated sentence so far
+     * @param {string[]} sentence The generated sentence so far
      * @return {boolean}
      */
     /**
      * Sets a condition that when met the generator will stop adding any more words to the sentence.
      * If condition is a function - will generate words until the function returns true. This function gets passed the generated sentence so far
-     * If condition is a string - will generate words until the last word is matches this string
+     * If condition is a string - will generate words until the last word matches this string
      * If condition is a number - will generate words until the sentence is this many words long
      *
      * @param {conditionFn|string|number} condition a condition that when met the generator will stop adding any more words to the sentence
@@ -79,12 +79,12 @@ module.exports = class Markovski {
             this._shouldEnd = sentence => condition(sentence);
         } else if (typeof condition === "string") {
             this._shouldEnd = sentence => {
-                const lastWord = sentence.split(' ').slice(-1)[0];
+                const lastWord = sentence.slice(-1)[0];
                 return condition === lastWord;
             };
         } else if (typeof condition === "number" || condition === undefined) {
             condition = condition || Infinity;
-            this._shouldEnd = sentence => sentence.split(' ').length >= condition;
+            this._shouldEnd = sentence => sentence.length >= condition;
         } else {
             throw new Error("Argument must be a function, a string, or a number");
         }
@@ -246,14 +246,15 @@ module.exports = class Markovski {
      */
     generate() {
         let currentWord = this._startWith(this._model);
-        this._sentence = currentWord;
+        Array.prototype.push.apply(this._sentence, currentWord.split(' '));
 
-        while (this._model[currentWord] && !this._shouldEnd(this._sentence)) {
-            currentWord = pickOneByWeight(this._model[currentWord]);
-            this._sentence += ' ' + currentWord;
+        let currentWordModel;
+        while (!this._shouldEnd(this._sentence) && (currentWordModel = this._model[currentWord])) {
+            currentWord = pickOneByWeight(currentWordModel);
+            Array.prototype.push.apply(this._sentence, currentWord.split(' '));
         }
 
-        return this._sentence;
+        return this._sentence.join(' ');
     }
 
     static START_WITH_UPPERCASE(model) {
