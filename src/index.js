@@ -179,6 +179,11 @@ module.exports = class Markovski {
     //endregion
 
     //region order
+    /**
+     * @param {string[]} wordList
+     * @return {string[]}
+     * @private
+     */
     _handleOrder(wordList) {
         return wordList.map((w, i) => {
             return wordList.slice(i, i + this._order).join(' ');
