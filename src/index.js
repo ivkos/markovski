@@ -1,6 +1,12 @@
 const pickOneByWeight = require("pick-one-by-weight");
 
 module.exports = class Markovski {
+    /**
+     * Creates a new Markovski object.
+     *
+     * @param {number=} order the order of the Markov model (optional, default is 1)
+     * @param {string=} text text to train the model with (optional)
+     */
     constructor(order, text) {
         this._model = Object.create(null);
         this._sentence = [];
