@@ -114,7 +114,7 @@ module.exports = class Markovski {
     _splitTextIntoSentences(text) {
         return sbd.sentences(text, {
             newline_boundaries: true,
-            sanitize: true
+            sanitize: false
         });
     }
 
