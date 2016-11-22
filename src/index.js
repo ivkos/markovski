@@ -45,7 +45,7 @@ module.exports = class Markovski {
         } else if (typeof fnOrStr === "function") {
             this._startWith = model => fnOrStr(model);
         } else {
-            throw new Error("Argument must be a function, or a string");
+            throw new Error("Argument must be a function or a string");
         }
 
         return this;
@@ -77,7 +77,8 @@ module.exports = class Markovski {
      * If condition is a string - will generate words until the last word matches this string
      * If condition is a number - will generate words until the sentence is this many words long
      *
-     * @param {conditionFn|string|number} condition a condition that when met the generator will stop adding any more words to the sentence
+     * @param {conditionFn|string|number} condition a condition that when met the generator
+     *                                    will stop adding any more words to the sentence
      * @return {Markovski}
      */
     endWhen(condition) {
@@ -192,7 +193,7 @@ module.exports = class Markovski {
      * @return {Markovski}
      */
     order(order) {
-        if (order <= 0) throw new Error("Order must be 1 or more");
+        if (order <= 0) throw new Error("Order must be at least 1");
 
         this._order = order;
         return this;
