@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/ivkos/markovski#readme",
   "dependencies": {
-    "pick-one-by-weight": "^1.0.2"
+    "natural": "^0.4.0",
+    "pick-one-by-weight": "^1.0.2",
+    "sbd": "^1.0.10"
   },
   "engines": {
     "node": "6.x"

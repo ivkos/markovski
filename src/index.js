@@ -1,5 +1,9 @@
 const pickOneByWeight = require("pick-one-by-weight");
 
+const sbd = require("sbd");
+const natural = require("natural");
+const wordTokenizer = new natural.WordTokenizer();
+
 module.exports = class Markovski {
     /**
      * Creates a new Markovski object.
@@ -108,7 +112,10 @@ module.exports = class Markovski {
      * @private
      */
     _splitTextIntoSentences(text) {
-        return text.split(/(?:\.|\?|\n)/ig);
+        return sbd.sentences(text, {
+            newline_boundaries: true,
+            sanitize: true
+        });
     }
 
     /**
@@ -135,7 +142,7 @@ module.exports = class Markovski {
      * @private
      */
     _splitSentenceIntoWords(sentence) {
-        return sentence.split(' ').filter(w => w.trim() !== '');
+        return wordTokenizer.tokenize(sentence);
     }
 
     /**
