@@ -250,6 +250,8 @@ module.exports = class Markovski {
      */
     generate() {
         let currentWord = this._startWith(this._model);
+        if (!currentWord) return "";
+
         Array.prototype.push.apply(this._sentence, currentWord.split(' '));
 
         let currentWordModel;
