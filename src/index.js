@@ -13,7 +13,6 @@ module.exports = class Markovski {
      */
     constructor(order, text) {
         this._model = Object.create(null);
-        this._sentence = [];
         this._order = 1;
 
         if (order) this.order(order);
@@ -239,8 +238,8 @@ module.exports = class Markovski {
      * @return {string}
      * @private
      */
-    _getLastNgram() {
-        return this._sentence.slice(-this._order).join(' ');
+    static _getLastNgram(sentence, order) {
+        return sentence.slice(-order).join(' ');
     }
 
     /**
@@ -249,18 +248,20 @@ module.exports = class Markovski {
      * @return {string}
      */
     generate() {
+        const sentence = [];
+
         let currentWord = this._startWith(this._model);
         if (!currentWord) return "";
 
-        Array.prototype.push.apply(this._sentence, currentWord.split(' '));
+        Array.prototype.push.apply(sentence, currentWord.split(' '));
 
         let currentWordModel;
-        while (!this._shouldEnd(this._sentence) && (currentWordModel = this._model[this._getLastNgram()])) {
+        while (!this._shouldEnd(sentence) && (currentWordModel = this._model[Markovski._getLastNgram(sentence, this._order)])) {
             currentWord = pickOneByWeight(currentWordModel);
-            Array.prototype.push.apply(this._sentence, [currentWord]);
+            Array.prototype.push.apply(sentence, [currentWord]);
         }
 
-        return this._sentence.join(' ');
+        return sentence.join(' ');
     }
 
     /**
