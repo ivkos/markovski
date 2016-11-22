@@ -180,17 +180,6 @@ module.exports = class Markovski {
 
     //region order
     /**
-     * @param {string[]} wordList
-     * @return {string[]}
-     * @private
-     */
-    _handleOrder(wordList) {
-        return wordList.map((w, i) => {
-            return wordList.slice(i, i + this._order).join(' ');
-        });
-    }
-
-    /**
      * Sets the order of the Markov model.
      *
      * @param {number} order the order
@@ -213,30 +202,31 @@ module.exports = class Markovski {
      */
     train(text) {
         this._splitTextIntoSentences(text).forEach(sentence => {
-            const words = this._handleOrder(this._splitSentenceIntoWords(sentence));
-
-            for (let i = 0; i < words.length - 1; ++i) {
-                const current = words[i];
-                const currentNormalized = this._normalizeWord(current);
-
-                const next = words[i + this._order];
-                if (!next) continue;
-
-                const nextNormalized = this._normalizeWord(next);
-
-                if (!this._model[currentNormalized]) {
-                    this._model[currentNormalized] = Object.create(null);
-                }
-
-                if (!this._model[currentNormalized][nextNormalized]) {
-                    this._model[currentNormalized][nextNormalized] = 1
-                } else {
-                    this._model[currentNormalized][nextNormalized] += 1
-                }
-            }
+            this._splitSentenceIntoWords(sentence)
+                .map(this._normalizeWord)
+                .map((v, i, words) => [
+                    words.slice(i, i + this._order).join(' '),
+                    words[i + this._order]
+                ])
+                .filter(([ngram, next]) => !!next)
+                .reduce((model, [ngram, next]) => {
+                    const subObj = model[ngram] || (model[ngram] = Object.create(null));
+                    subObj[next] = (subObj[next] || 0) + 1;
+                    return model;
+                }, this._model);
         });
 
         return this;
+    }
+
+    /**
+     * Returns the last n-gram, for n=order.
+     *
+     * @return {string}
+     * @private
+     */
+    _getLastNgram() {
+        return this._sentence.slice(-this._order).join(' ');
     }
 
     /**
@@ -249,9 +239,9 @@ module.exports = class Markovski {
         Array.prototype.push.apply(this._sentence, currentWord.split(' '));
 
         let currentWordModel;
-        while (!this._shouldEnd(this._sentence) && (currentWordModel = this._model[currentWord])) {
+        while (!this._shouldEnd(this._sentence) && (currentWordModel = this._model[this._getLastNgram()])) {
             currentWord = pickOneByWeight(currentWordModel);
-            Array.prototype.push.apply(this._sentence, currentWord.split(' '));
+            Array.prototype.push.apply(this._sentence, [currentWord]);
         }
 
         return this._sentence.join(' ');
