@@ -273,4 +273,21 @@ module.exports = class Markovski {
         const upperCaseWords = Object.keys(model).filter(w => w[0].match(upperCaseLetterRegex) !== null);
         return upperCaseWords[~~(Math.random() * upperCaseWords.length)];
     }
+
+    /**
+     * Returns a startFn function that returns a random word, matching the regexp, to start the sentence with
+     *
+     * @param {RegExp} regexp
+     * @return {startFn} function that returns a random word, matching the regexp, to start the sentence with
+     */
+    static matchingRegExp(regexp) {
+        if (!(regexp instanceof RegExp)) {
+            throw new Error("Argument must be a RegExp object");
+        }
+
+        return model => {
+            const matches = Object.keys(model).filter(w => w.match(regexp) !== null);
+            return matches[~~(Math.random() * matches.length)];
+        }
+    }
 };
