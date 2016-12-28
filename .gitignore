@@ -38,3 +38,4 @@ jspm_packages
 .npm
 .node_repl_history
 .idea/
+local_test.js
