@@ -202,9 +202,11 @@ module.exports = class Markovski {
      * chat messages), and also slightly decreases the model's memory footprint.
      *
      * @param {boolean} useLowerCaseModelKeys whether to use lower-case keys in the model
+     * @return {Markovski}
      */
     lowerCaseModelKeys(useLowerCaseModelKeys) {
         this._lowerCaseModelKeys = !!useLowerCaseModelKeys;
+        return this;
     }
 
     //region order
