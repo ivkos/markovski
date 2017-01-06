@@ -18,6 +18,7 @@ module.exports = class Markovski {
         this._model = Object.create(null);
         this._order = 1;
         this._vom = !!vom;
+        this._lowerCaseModelKeys = false;
 
         if (order) this.order(order);
         if (text) this.train(text);
@@ -195,6 +196,17 @@ module.exports = class Markovski {
 
     //endregion
 
+    /**
+     * Sets the preference for lower-case keys in the model. Using such makes generated sentences more sensible,
+     * especially if the model has been trained with free-form text not strictly following grammar rules (e.g.
+     * chat messages), and also slightly decreases the model's memory footprint.
+     *
+     * @param {boolean} useLowerCaseModelKeys whether to use lower-case keys in the model
+     */
+    lowerCaseModelKeys(useLowerCaseModelKeys) {
+        this._lowerCaseModelKeys = !!useLowerCaseModelKeys;
+    }
+
     //region order
     /**
      * Sets the order of the Markov model.
@@ -233,6 +245,7 @@ module.exports = class Markovski {
                 .reduce((r, v) => r.concat([...v]), [])
                 .filter(([ngram, next]) => !!next)
                 .reduce((model, [ngram, next]) => {
+                    if (this._lowerCaseModelKeys) ngram = ngram.toLowerCase();
                     const subObj = model[ngram] || (model[ngram] = Object.create(null));
                     subObj[next] = (subObj[next] || 0) + 1;
                     return model;
@@ -251,7 +264,9 @@ module.exports = class Markovski {
      * @private
      */
     static _getLastNgram(sentence, n) {
-        return sentence.slice(-n).join(' ');
+        const result = sentence.slice(-n).join(' ');
+
+        return this._lowerCaseModelKeys ? result.toLowerCase() : result;
     }
 
     /**
