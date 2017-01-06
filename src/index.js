@@ -265,7 +265,7 @@ module.exports = class Markovski {
      * @return {string}
      * @private
      */
-    static _getLastNgram(sentence, n) {
+    _getLastNgram(sentence, n) {
         const result = sentence.slice(-n).join(' ');
 
         return this._lowerCaseModelKeys ? result.toLowerCase() : result;
@@ -282,7 +282,7 @@ module.exports = class Markovski {
         let followers;
         for (
             let i = this._order;
-            !(followers = this._model[Markovski._getLastNgram(sentence, i)]) && i >= 1;
+            !(followers = this._model[this._getLastNgram(sentence, i)]) && i >= 1;
             --i
         );
         return followers;
