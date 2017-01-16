@@ -24,6 +24,26 @@ module.exports = class Markovski {
         if (text) this.train(text);
     }
 
+    /**
+     * Sets a model object to build upon and generate sentences from.
+     *
+     * @param {{}} model
+     * @returns {Markovski}
+     */
+    withModel(model) {
+        this._model = model;
+        return this;
+    }
+
+    /**
+     * Returns the current Markov model.
+     *
+     * @returns {{}}
+     */
+    getModel() {
+        return this._model;
+    }
+
     //region startWith
     /**
      * @param model Markov model
