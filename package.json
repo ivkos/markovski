@@ -1,6 +1,6 @@
 {
   "name": "markovski",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Generates a Markov chain based on text input",
   "main": "src/index.js",
   "repository": {
@@ -24,9 +24,9 @@
   },
   "homepage": "https://github.com/ivkos/markovski#readme",
   "dependencies": {
-    "natural": "^0.4.0",
+    "natural": "^0.5.4",
     "pick-one-by-weight": "^1.0.2",
-    "sbd": "^1.0.10"
+    "sbd": "^1.0.12"
   },
   "engines": {
     "node": ">=6.x"
