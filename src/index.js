@@ -1,8 +1,7 @@
 const pickOneByWeight = require("pick-one-by-weight");
 
 const sbd = require("sbd");
-const natural = require("natural");
-const wordTokenizer = new natural.WordTokenizer();
+const lodashWords = require("lodash.words");
 
 module.exports = class Markovski {
     /**
@@ -166,7 +165,7 @@ module.exports = class Markovski {
      * @private
      */
     _splitSentenceIntoWords(sentence) {
-        return wordTokenizer.tokenize(sentence);
+        return lodashWords(sentence);
     }
 
     /**

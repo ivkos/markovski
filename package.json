@@ -1,6 +1,6 @@
 {
   "name": "markovski",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Generates a Markov chain based on text input",
   "main": "src/index.js",
   "repository": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/ivkos/markovski#readme",
   "dependencies": {
-    "natural": "^0.5.4",
+    "lodash.words": "^4.2.0",
     "pick-one-by-weight": "^1.0.2",
     "sbd": "^1.0.12"
   },
